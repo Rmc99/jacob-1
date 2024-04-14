@@ -1,4 +1,5 @@
 import requests
+#from collections import deque
 
 class Grafo:
     def __init__(self, nome_arquivo):
@@ -35,6 +36,7 @@ class Grafo:
         print("Vértices:", self.vertices)
         print("Após leitura de 'meu_arquivo.txt' a matriz representada acima:")
 
+
 class MinhaApi: # formtado do arquivo gerado: graph {1 -- 2;1 -- 3;2 -- 4;3 -- 5;4 -- 5;}
     @staticmethod
     def gerar_arq_layout_nao_direcionado(arestas):
@@ -61,6 +63,7 @@ class MinhaApi: # formtado do arquivo gerado: graph {1 -- 2;1 -- 3;2 -- 4;3 -- 5
         with open(nome_arquivo_api, 'r') as arquivo:
             parametro_api = arquivo.read()
             return parametro_api
+
 
 class OperacoesGrafo: # Classe que irá fazer as operações com os grafos
     @staticmethod
@@ -136,7 +139,6 @@ class OperacoesGrafo: # Classe que irá fazer as operações com os grafos
                                                               todos_caminhos)
         return todos_caminhos
 
-
     @staticmethod
     def encontrar_caminhos_direcionado(grafo, origem, destino, caminho_atual, visitados, todos_caminhos):
         visitados.add(origem)
@@ -154,7 +156,33 @@ class OperacoesGrafo: # Classe que irá fazer as operações com os grafos
         visitados.remove(origem)
         caminho_atual.pop()
 
+    @staticmethod
+    def detecta_arvore(grafo):
+        if grafo.tipo_grafo == 'D':
+            print("Um grafo direcionado não pode ser uma árvore.")
+            return False
 
+        visitados = set()
+        fila = list(grafo.vertices)[0:1]  # Começamos pela raiz
+
+        while fila:
+            vertice = fila.pop(0)
+            if vertice in visitados:
+                print("O grafo possui ciclos e, portanto, não é uma árvore.")
+                return False
+            visitados.add(vertice)
+            for vizinho in OperacoesGrafo.busca_vizinhos_nao_direcionado(vertice, grafo.arestas):
+                if vizinho not in visitados:
+                    fila.append(vizinho)
+
+        if len(visitados) == len(grafo.vertices):
+            print("O grafo é uma árvore.")
+            input("Pressione <enter> para continuar")
+            return True
+        else:
+            print("O grafo não é uma árvore.")
+            input("Pressione <enter> para continuar")
+            return False
 
 
 class Menu: # Classe Menu
@@ -170,9 +198,10 @@ class Menu: # Classe Menu
                 print("3. Buscar vizinho do vértice informado: ")
                 print("4. Visitar todas as arestas possíveis do grafo: ")
                 print("5. Representação gráfica do GRAFO com API quickchart.io (https://quickchart.io/): ")
-                print("6. Sair")
-
+                print("6. Detectar se grafo é uma ÁRVORE através do algoritmo de busca em largura (BFS): ")
+                print("7. Sair")
                 opcao = input("Escolha uma opção: ")
+
 
                 if opcao == "1":
                     vertice1 = str(input("Informe o 1º vértice: "))
@@ -196,6 +225,7 @@ class Menu: # Classe Menu
                     else:
                         print("Um dos vértices NÃO faz parte do grafo !!!")
 
+
                 elif opcao == "2":
                     vertice1 = str(input("Informe o vértice que deseja descobrir o grau: "))
 
@@ -214,6 +244,7 @@ class Menu: # Classe Menu
                         busca_vizinhos_direcionado = OperacoesGrafo.busca_vizinhos_direcionado(vertice1, self.grafo.arestas)
                         print("Os vizinhos do vértice", vertice1, "são:", busca_vizinhos_direcionado)
                         input("Pressione <enter> para continuar")
+
 
                 elif opcao == "4":
                     if self.grafo.tipo_grafo == "ND":
@@ -241,9 +272,6 @@ class Menu: # Classe Menu
                                 print(caminho)
                         else:
                             print("Não há caminhos possíveis entre", vertice_origem, "e", vertice_destino)
-
-
-
 
 
                 elif opcao == "5":
@@ -282,7 +310,15 @@ class Menu: # Classe Menu
                         else:
                             print(f"Erro ao gerar o gráfico: {response.text}")
 
+
                 elif opcao == "6":
+                    if self.grafo:
+                        OperacoesGrafo.detecta_arvore(self.grafo)
+                    else:
+                        print("Grafo não inicializado. Por favor, leia o arquivo primeiro.")
+
+
+                elif opcao == "7":
                     OperacoesGrafo.sair()
                     return
 
