@@ -202,7 +202,6 @@ class Menu: # Classe Menu
                 print("7. Sair")
                 opcao = input("Escolha uma opção: ")
 
-
                 if opcao == "1":
                     vertice1 = str(input("Informe o 1º vértice: "))
                     vertice2 = str(input("Informe o 2º vértice: "))
@@ -228,14 +227,12 @@ class Menu: # Classe Menu
 
                 elif opcao == "2":
                     vertice1 = str(input("Informe o vértice que deseja descobrir o grau: "))
-
                     calcula_grau = OperacoesGrafo.calcula_grau(vertice1, self.grafo.vertices, self.grafo.matriz_adjacencia)
                     print("GRAU DO VÉRTICE", vertice1, ":", calcula_grau)
 
 
                 elif opcao == "3":
                     vertice1 = str(input("Informe o vértice que deseja consultar os vizinhos: "))
-
                     if self.grafo.tipo_grafo == "ND":
                         busca_vizinhos_nao_direcionado = OperacoesGrafo.busca_vizinhos_nao_direcionado(vertice1, self.grafo.arestas)
                         print("Os vizinhos do vértice", vertice1, "são:", busca_vizinhos_nao_direcionado)
@@ -250,7 +247,6 @@ class Menu: # Classe Menu
                     if self.grafo.tipo_grafo == "ND":
                         vertice_origem = input("Informe o vértice de origem: ")
                         vertice_destino = input("Informe o vértice de destino: ")
-
                         caminhos = OperacoesGrafo.buscar_caminhos_possiveis(self.grafo.arestas, vertice_origem,
                                                                             vertice_destino, direcionado=False)
                         if caminhos:
@@ -263,7 +259,6 @@ class Menu: # Classe Menu
                     elif self.grafo.tipo_grafo == "D":
                         vertice_origem = input("Informe o vértice de origem: ")
                         vertice_destino = input("Informe o vértice de destino: ")
-
                         caminhos = OperacoesGrafo.buscar_caminhos_possiveis(self.grafo.arestas, vertice_origem,
                                                                             vertice_destino, direcionado=True)
                         if caminhos:
@@ -282,7 +277,6 @@ class Menu: # Classe Menu
                             "layout": "dot",
                             "format": "svg"
                         }
-                        response = requests.post('https://quickchart.io/graphviz', json=body)   # Fazendo a requisição para o Quickchart.io
                         try:    # Verificando se a requisição foi bem-sucedida
                             response = requests.post('https://quickchart.io/graphviz', json=body)   # Fazendo a solicitação POST
                             if response.status_code == 200: # Verificando o status da resposta
