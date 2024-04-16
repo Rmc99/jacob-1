@@ -160,11 +160,11 @@ class OperacoesGrafo: # Classe que irá fazer as operações com os grafos
                     v2 = vertices[j]
                     if [v1, v2] in arestas or [v2, v1] in arestas:
                         arestas_geradas.append((v1, v2))
-        for aresta in arestas_geradas:
-            if direcionado:
-                print(f"Aresta de {aresta[0]} para {aresta[1]}")
-            else:
-                print(f"Aresta entre {aresta[0]} e {aresta[1]}")
+            for aresta in arestas_geradas:
+                if direcionado:
+                    print(f"Aresta de {aresta[0]} para {aresta[1]}")
+                else:
+                    print(f"Aresta entre {aresta[0]} e {aresta[1]}")
 
 
 class Menu: # Classe Menu
