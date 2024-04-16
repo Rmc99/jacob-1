@@ -110,53 +110,6 @@ class OperacoesGrafo: # Classe que irá fazer as operações com os grafos
         return vizinhos
 
     @staticmethod
-    def encontrar_caminhos_nao_direcionado(grafo, origem, destino, caminho_atual, visitados, todos_caminhos):
-        visitados.add(origem)
-        caminho_atual.append(origem)
-
-        if origem == destino:
-            todos_caminhos.append(list(caminho_atual))
-        else:
-            for aresta in grafo:
-                if origem in aresta:
-                    vizinho = aresta[1] if aresta[0] == origem else aresta[0]
-                    if vizinho not in visitados:
-                        OperacoesGrafo.encontrar_caminhos_nao_direcionado(grafo, vizinho, destino, caminho_atual, visitados, todos_caminhos)
-
-        visitados.remove(origem)
-        caminho_atual.pop()
-
-    @staticmethod
-    def buscar_caminhos_possiveis(grafo, origem, destino, direcionado=True):
-        todos_caminhos = []
-        visitados = set()
-        caminho_atual = []
-        if direcionado:
-            OperacoesGrafo.encontrar_caminhos_direcionado(grafo, origem, destino, caminho_atual, visitados,
-                                                          todos_caminhos)
-        else:
-            OperacoesGrafo.encontrar_caminhos_nao_direcionado(grafo, origem, destino, caminho_atual, visitados,
-                                                              todos_caminhos)
-        return todos_caminhos
-
-    @staticmethod
-    def encontrar_caminhos_direcionado(grafo, origem, destino, caminho_atual, visitados, todos_caminhos):
-        visitados.add(origem)
-        caminho_atual.append(origem)
-
-        if origem == destino:
-            todos_caminhos.append(list(caminho_atual))
-        else:
-            for aresta in grafo:
-                if aresta[0] == origem:
-                    vizinho = aresta[1]
-                    if vizinho not in visitados:
-                        OperacoesGrafo.encontrar_caminhos_direcionado(grafo, vizinho, destino, caminho_atual, visitados, todos_caminhos)
-
-        visitados.remove(origem)
-        caminho_atual.pop()
-
-    @staticmethod
     def detecta_arvore(grafo):
         if grafo.tipo_grafo == 'D':
             print("Um grafo direcionado não pode ser uma árvore.")
@@ -183,6 +136,35 @@ class OperacoesGrafo: # Classe que irá fazer as operações com os grafos
             print("O grafo não é uma árvore.")
             input("Pressione <enter> para continuar")
             return False
+
+    @staticmethod
+    def visitar_arestas(vertices, arestas, direcionado=False):
+        arestas_geradas = []
+
+        if direcionado:
+            for i in range(len(vertices)):
+                for j in range(i + 1, len(vertices)):
+                    v1 = vertices[i]
+                    v2 = vertices[j]
+                    if [v1, v2] in arestas:
+                        arestas_geradas.append((v1, v2))
+                        print(f"Aresta encontrada: {v1} -> {v2}")
+                    elif [v2, v1] in arestas:
+                        arestas_geradas.append((v2, v1))
+                        print(f"Aresta encontrada: {v2} -> {v1}")
+
+        else:
+            for i in range(len(vertices)):
+                for j in range(i + 1, len(vertices)):
+                    v1 = vertices[i]
+                    v2 = vertices[j]
+                    if [v1, v2] in arestas or [v2, v1] in arestas:
+                        arestas_geradas.append((v1, v2))
+        for aresta in arestas_geradas:
+            if direcionado:
+                print(f"Aresta de {aresta[0]} para {aresta[1]}")
+            else:
+                print(f"Aresta entre {aresta[0]} e {aresta[1]}")
 
 
 class Menu: # Classe Menu
@@ -245,28 +227,9 @@ class Menu: # Classe Menu
 
                 elif opcao == "4":
                     if self.grafo.tipo_grafo == "ND":
-                        vertice_origem = input("Informe o vértice de origem: ")
-                        vertice_destino = input("Informe o vértice de destino: ")
-                        caminhos = OperacoesGrafo.buscar_caminhos_possiveis(self.grafo.arestas, vertice_origem,
-                                                                            vertice_destino, direcionado=False)
-                        if caminhos:
-                            print("Caminhos possíveis entre", vertice_origem, "e", vertice_destino, ":")
-                            for caminho in caminhos:
-                                print(caminho)
-                        else:
-                            print("Não há caminhos possíveis entre", vertice_origem, "e", vertice_destino)
-
+                        OperacoesGrafo.visitar_arestas(self.grafo.vertices, self.grafo.arestas, direcionado=False)
                     elif self.grafo.tipo_grafo == "D":
-                        vertice_origem = input("Informe o vértice de origem: ")
-                        vertice_destino = input("Informe o vértice de destino: ")
-                        caminhos = OperacoesGrafo.buscar_caminhos_possiveis(self.grafo.arestas, vertice_origem,
-                                                                            vertice_destino, direcionado=True)
-                        if caminhos:
-                            print("Caminhos possíveis entre", vertice_origem, "e", vertice_destino, ":")
-                            for caminho in caminhos:
-                                print(caminho)
-                        else:
-                            print("Não há caminhos possíveis entre", vertice_origem, "e", vertice_destino)
+                        OperacoesGrafo.visitar_arestas(self.grafo.vertices, self.grafo.arestas, direcionado=True)
 
 
                 elif opcao == "5":
