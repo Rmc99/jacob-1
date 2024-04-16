@@ -178,7 +178,7 @@ class Menu: # Classe Menu
                 print("1. Descobrir se dois vértices são adjacentes: ")
                 print("2. Calcular o grau de um vértice informado: ")
                 print("3. Buscar vizinho do vértice informado: ")
-                print("4. Visitar todas as arestas possíveis do grafo: ")
+                print("4. Visitar todas as arestas do grafo: ")
                 print("5. Representação gráfica do GRAFO com API quickchart.io (https://quickchart.io/): ")
                 print("6. Detectar se grafo é uma ÁRVORE através do algoritmo de busca em largura (BFS): ")
                 print("7. Sair")
