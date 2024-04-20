@@ -110,8 +110,15 @@ class OperacoesGrafo:   # Classe que irá fazer as operações com os grafos
 
     @staticmethod
     def detecta_arvore(grafo):      # Método para detectar se o grafo é uma árvore
-        if grafo.tipo_grafo == 'D':
+        num_arestas = len(grafo.arestas)
+        num_vertices = int(len(grafo.vertices))
+
+        if (grafo.tipo_grafo == 'D'):
             print("Um grafo direcionado não pode ser uma árvore.")
+            return False
+
+        if num_arestas != num_vertices - 1: # Calcula se o grafo é uma árvore através do número de vértices e arestas
+            print("Para ser uma árvore o grafo precisa ter 'n−1' arestas, onde 'n' é o número de vértices")
             return False
 
         visitados = set()
