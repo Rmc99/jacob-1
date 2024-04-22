@@ -88,43 +88,57 @@ class OperacoesGrafo:   # Classe que irá fazer as operações com os grafos
     def calcula_grau(vertice1, vertices, matriz_adjacencia):    # Verifica a qtd de 1 na linha para retornar o grau
         if vertice1 in vertices:
             indice_vertice = vertices.index(vertice1)
-            grau = sum(matriz_adjacencia[indice_vertice])
+            grau = sum(matriz_adjacencia[indice_vertice]) # Soma os 1 que cada sub lista possi de acordo com o índice
             return grau
 
     @staticmethod
-    def busca_vizinhos_nao_direcionado(vertice1, arestas):
-        vizinhos = set()
-        for a in arestas:
-            if vertice1 in a:
-                vizinhos.update(a)
+    def busca_vizinhos_nao_direcionado(vertice1, arestas): #    Buscas os vizinhos do vértice informado
+        vizinhos = set()        #   Inicializa o conjunto
+        for a in arestas:   # Seta todas as arestas para variavel 'a'
+            if vertice1 in a:   # Busca o vértice informado nas arestas do grafo
+                vizinhos.update(a) #    Atualiza o conjunto 'vizinhos' com o vértice que faz par a aresta
         vizinhos.remove(vertice1)  # Remove o próprio vértice da lista de vizinhos
         return sorted(vizinhos) # Função para ordenar
 
     @staticmethod
-    def busca_vizinhos_direcionado(vertice1, arestas):
+    def busca_vizinhos_direcionado(vertice1, arestas): #    Busca vizinhos do vértice direcionado
         vizinhos = []
         for a, b in arestas:
-            if a == vertice1:
-                vizinhos.append(b)
+            if a == vertice1:   # Nessa linha pegamos apenas os vizinhos onde o vértice informado for 'a'
+                vizinhos.append(b)  # Atualiza a lista vizinhos com o vért par ao vértice informado na posição 'b'
         return vizinhos
 
     @staticmethod
+    def visitar_arestas(vertices, arestas, direcionado=False):  # Método que visita todas as arestas do grafo
+        arestas_geradas = [] # Inicializa a lista
+
+        if direcionado:
+            for i in range(len(vertices)):  # Percorre todos os vértices
+                for j in range(i + 1, len(vertices)):   # Percorre os vértices a partir da 2º posição
+                    v1 = vertices[i]
+                    v2 = vertices[j]
+                    if [v1, v2] in arestas: # Verifica se existe o par de aresta na ordem buscada
+                        arestas_geradas.append((v1, v2))        # Atualiza a lista de arestas percorridas
+                        print(f"Aresta encontrada: {v1} -> {v2}") # Exibe exatamente como o par de aresta é composto
+                    elif [v2, v1] in arestas: # Verifica se existe o par de aresta na ordem inversa
+                        arestas_geradas.append((v2, v1))    # Atualiza a lista de arestas percorridas
+                        print(f"Aresta encontrada: {v2} -> {v1}")
+
+        else: # Percorre todos os vértices e arestas de um grafo não direcionado
+            for i in range(len(vertices)): # Percorre os vértices
+                for j in range(i + 1, len(vertices)):   # Percorre os vértices a partir da 2º posição
+                    v1 = vertices[i]
+                    v2 = vertices[j]
+                    if [v1, v2] in arestas or [v2, v1] in arestas:
+                        arestas_geradas.append((v1, v2)) # Atualiza a lista de arestas percorridas
+                        print(f"Aresta encontrada {v1} e {v2}") # Exibe as arestas percorridas no grafo
+
+    @staticmethod # Vamos verificar se o grafo possui ciclos e se a QTD de vertice e aretas atendem os requisitos
     def detecta_arvore(grafo):      # Método para detectar se o grafo é uma árvore
-        num_arestas = len(grafo.arestas)
-        num_vertices = int(len(grafo.vertices))
-
-        if (grafo.tipo_grafo == 'D'):
-            print("Um grafo direcionado não pode ser uma árvore.")
-            return False
-
-        if num_arestas != num_vertices - 1: # Calcula se o grafo é uma árvore através do número de vértices e arestas
-            print("Para ser uma árvore o grafo precisa ter 'n−1' arestas, onde 'n' é o número de vértices")
-            return False
-
         visitados = set()
-        fila = list(grafo.vertices)[0:1]  # Começamos pela raiz
+        fila = list(grafo.vertices)[0:1]  # Começamos pela raiz e inicializa a fila
 
-        while fila:
+        while fila: # Enquanto existir elemento na fila ele continua
             vertice = fila.pop(0) # Método pop() remove o elemento da fila
             if vertice in visitados: # Se o vértice já tiver sido visitado indica presença de ciclo
                 print("O grafo possui ciclos e, portanto, não é uma árvore.")
@@ -134,43 +148,12 @@ class OperacoesGrafo:   # Classe que irá fazer as operações com os grafos
                 if vizinho not in visitados:
                     fila.append(vizinho)
 
-        if len(visitados) == len(grafo.vertices):
+        if len(visitados) == len(grafo.vertices): # verifico se o grafo é aciclico
             print("O grafo é uma árvore.")
-            input("Pressione <enter> para continuar")
             return True
         else:
             print("O grafo não é uma árvore.")
-            input("Pressione <enter> para continuar")
             return False
-
-    @staticmethod
-    def visitar_arestas(vertices, arestas, direcionado=False):
-        arestas_geradas = []
-
-        if direcionado:
-            for i in range(len(vertices)):
-                for j in range(i + 1, len(vertices)):
-                    v1 = vertices[i]
-                    v2 = vertices[j]
-                    if [v1, v2] in arestas:
-                        arestas_geradas.append((v1, v2))
-                        print(f"Aresta encontrada: {v1} -> {v2}")
-                    elif [v2, v1] in arestas:
-                        arestas_geradas.append((v2, v1))
-                        print(f"Aresta encontrada: {v2} -> {v1}")
-
-        else:
-            for i in range(len(vertices)):
-                for j in range(i + 1, len(vertices)):
-                    v1 = vertices[i]
-                    v2 = vertices[j]
-                    if [v1, v2] in arestas or [v2, v1] in arestas:
-                        arestas_geradas.append((v1, v2))
-            for aresta in arestas_geradas:
-                if direcionado:
-                    print(f"Aresta de {aresta[0]} para {aresta[1]}")
-                else:
-                    print(f"Aresta entre {aresta[0]} e {aresta[1]}")
 
 
 class Menu: # Classe Menu
