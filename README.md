@@ -10,9 +10,9 @@ A partir da 2º linha: arestas -> 1,2; 1,3; 2,4; 3,5; 4,5
 
 Segue como ficaria o layout de arquivo para o programa poder executar:
 
-d
-1,2
-1,3
-2,4
-3,5
-4,5
+d\n
+1,2\n
+1,3\n
+2,4\n
+3,5\n
+4,5\n
